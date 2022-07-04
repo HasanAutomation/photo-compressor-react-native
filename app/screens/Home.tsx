@@ -1,37 +1,22 @@
 import React, {FC} from 'react';
+
 import {Alert, PermissionsAndroid, StyleSheet, Text, View} from 'react-native';
 import LargeIconButton from '../components/LargeIconButton';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import {requestCameraPermission, selectAndCaptureImage} from '../utils/helpers';
 
 interface Props {}
 
 const Home: FC<Props> = (props: Props): JSX.Element => {
   const handleImageCapture = async (): Promise<void> => {
     try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-        {
-          title: 'Camera Permission',
-          message: 'Accept to take photos',
-          buttonNeutral: 'Ask me Later',
-          buttonPositive: 'Ok',
-          buttonNegative: 'Cancel',
-        },
-      );
-      const {NEVER_ASK_AGAIN, DENIED} = PermissionsAndroid.RESULTS;
-      if (granted === NEVER_ASK_AGAIN)
-        return Alert.alert(
-          'Failed to open camera',
-          'It looks like you disabled the permission for camera',
-        );
-
-      if (granted === DENIED)
-        return Alert.alert(
-          'Failed to open camera',
-          'You have to give permission to the camera',
-        );
-    } catch (er) {
-      console.log('err', er);
+      await requestCameraPermission();
+      // Open the camera
+      const {path, error} = await selectAndCaptureImage();
+      if (error) return console.log(error);
+      console.log(path);
+    } catch (err) {
+      console.log('err', err);
     }
   };
 
