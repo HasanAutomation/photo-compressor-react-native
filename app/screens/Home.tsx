@@ -7,6 +7,14 @@ interface Props {}
 const Home: FC<Props> = (props: Props): JSX.Element => {
   return (
     <View style={styles.container}>
+      <View style={styles.titleContainer}>
+        <Text style={styles.heading}>Choose your image</Text>
+        <Text style={styles.subHeading}>
+          You can select your image using one of those options which you want to
+          convert to small size
+        </Text>
+      </View>
+
       <View style={styles.btnContainer}>
         <TouchableOpacity style={styles.button}>
           <Icon style={styles.icon} name="camera" />
@@ -49,6 +57,26 @@ const styles = StyleSheet.create({
   icon: {
     fontSize: 60,
     color: '#6c9ADE',
+  },
+  heading: {
+    fontSize: 25,
+    color: '#272727',
+    fontWeight: '500',
+    textAlign: 'center',
+  },
+  subHeading: {
+    color: '#272727',
+    textAlign: 'center',
+    opacity: 0.5,
+    lineHeight: 20,
+    paddingTop: 7,
+  },
+  titleContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    paddingTop: 10,
   },
 });
 
