@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
+import LargeIconButton from '../components/LargeIconButton';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 interface Props {}
@@ -14,19 +15,12 @@ const Home: FC<Props> = (props: Props): JSX.Element => {
           convert to small size
         </Text>
       </View>
-
-      <View style={styles.btnContainer}>
-        <TouchableOpacity style={styles.button}>
-          <Icon style={styles.icon} name="camera" />
-        </TouchableOpacity>
-        <Text style={styles.btnLabel}>Capture</Text>
-      </View>
-      <View style={styles.btnContainer}>
-        <TouchableOpacity style={styles.button}>
-          <Icon style={styles.icon} name="folder-open" />
-        </TouchableOpacity>
-        <Text style={styles.btnLabel}>Select</Text>
-      </View>
+      <LargeIconButton title="Capture">
+        <Icon name="camera" />
+      </LargeIconButton>
+      <LargeIconButton title="Select">
+        <Icon name="folder-open" />
+      </LargeIconButton>
     </View>
   );
 };
@@ -36,27 +30,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  btnContainer: {
-    width: 120,
-    height: 120,
-    marginVertical: 20,
-  },
-  button: {
-    borderWidth: 4,
-    borderColor: '#6C9ADE',
-    borderRadius: 7,
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  btnLabel: {
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  icon: {
-    fontSize: 60,
-    color: '#6c9ADE',
   },
   heading: {
     fontSize: 25,
