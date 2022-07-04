@@ -1,18 +1,31 @@
 import React, {FC} from 'react';
 
-import {Alert, PermissionsAndroid, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import LargeIconButton from '../components/LargeIconButton';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {requestCameraPermission, selectAndCaptureImage} from '../utils/helpers';
+import {
+  selectAndCaptureImage,
+  selectAndCropFromGallery,
+} from '../utils/helpers';
 
 interface Props {}
 
 const Home: FC<Props> = (props: Props): JSX.Element => {
   const handleImageCapture = async (): Promise<void> => {
     try {
-      await requestCameraPermission();
       // Open the camera
       const {path, error} = await selectAndCaptureImage();
+      if (error) return console.log(error);
+      console.log(path);
+    } catch (err) {
+      console.log('err', err);
+    }
+  };
+
+  const handleImageSelection = async (): Promise<void> => {
+    try {
+      // Open the camera
+      const {path, error} = await selectAndCropFromGallery();
       if (error) return console.log(error);
       console.log(path);
     } catch (err) {
@@ -32,7 +45,7 @@ const Home: FC<Props> = (props: Props): JSX.Element => {
       <LargeIconButton title="Capture" onPress={handleImageCapture}>
         <Icon name="camera" />
       </LargeIconButton>
-      <LargeIconButton title="Select">
+      <LargeIconButton title="Select" onPress={handleImageSelection}>
         <Icon name="folder-open" />
       </LargeIconButton>
     </View>

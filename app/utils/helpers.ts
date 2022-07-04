@@ -36,7 +36,27 @@ export const selectAndCaptureImage = async (
   cropping = true,
 ): Promise<{path: string; error: unknown | null}> => {
   try {
+    await requestCameraPermission();
     const {path} = await ImagePicker.openCamera({
+      width,
+      height,
+      cropping,
+    });
+    return {path, error: null};
+  } catch (err) {
+    console.log('err', err);
+    return {path: '', error: err};
+  }
+};
+
+export const selectAndCropFromGallery = async (
+  width: number = 413,
+  height: number = 531,
+  cropping = true,
+): Promise<{path: string; error: unknown | null}> => {
+  try {
+    await requestCameraPermission();
+    const {path} = await ImagePicker.openPicker({
       width,
       height,
       cropping,
