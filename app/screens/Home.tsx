@@ -1,11 +1,40 @@
 import React, {FC} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Alert, PermissionsAndroid, StyleSheet, Text, View} from 'react-native';
 import LargeIconButton from '../components/LargeIconButton';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 interface Props {}
 
 const Home: FC<Props> = (props: Props): JSX.Element => {
+  const handleImageCapture = async (): Promise<void> => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: 'Camera Permission',
+          message: 'Accept to take photos',
+          buttonNeutral: 'Ask me Later',
+          buttonPositive: 'Ok',
+          buttonNegative: 'Cancel',
+        },
+      );
+      const {NEVER_ASK_AGAIN, DENIED} = PermissionsAndroid.RESULTS;
+      if (granted === NEVER_ASK_AGAIN)
+        return Alert.alert(
+          'Failed to open camera',
+          'It looks like you disabled the permission for camera',
+        );
+
+      if (granted === DENIED)
+        return Alert.alert(
+          'Failed to open camera',
+          'You have to give permission to the camera',
+        );
+    } catch (er) {
+      console.log('err', er);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
@@ -15,7 +44,7 @@ const Home: FC<Props> = (props: Props): JSX.Element => {
           convert to small size
         </Text>
       </View>
-      <LargeIconButton title="Capture">
+      <LargeIconButton title="Capture" onPress={handleImageCapture}>
         <Icon name="camera" />
       </LargeIconButton>
       <LargeIconButton title="Select">
