@@ -1,11 +1,16 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {FC} from 'react';
+import React, {FC, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import BackgroundImageEditor from '../components/BackgroundImageEditor';
+import ConfirmModal from '../components/ConfirmModal';
 import EditorTools from '../components/EditorTools';
 import ImageEditorHeader from '../components/ImageEditorHeader';
 import SelectedImage from '../components/SelectedImage';
 import {RootStackParamList} from '../navigation/AppNavigator';
+import {
+  selectAndCaptureImage,
+  selectAndCropFromGallery,
+} from '../utils/helpers';
 
 type RouteProps = NativeStackScreenProps<RootStackParamList, 'ImageEditor'>;
 
@@ -15,14 +20,31 @@ interface Props {
 
 const ImageEditor: FC<Props> = ({route}): JSX.Element => {
   const {imageUri} = route.params;
+  const [selectedImage, setSelectedImage] = useState<string>('');
+
+  const captureImageToCompress = async (): Promise<void> => {
+    const {path, error} = await selectAndCaptureImage();
+    if (error) return console.log(error);
+    setSelectedImage(path);
+  };
+  const selectImageToCompress = async (): Promise<void> => {
+    const {path, error} = await selectAndCropFromGallery();
+    if (error) return console.log(error);
+    setSelectedImage(path);
+  };
+
   return (
     <View style={styles.container}>
       <ImageEditorHeader />
       <BackgroundImageEditor />
       <View style={styles.imageContainer}>
-        <SelectedImage uri={imageUri} />
+        <SelectedImage uri={selectedImage || imageUri} />
       </View>
-      <EditorTools />
+      <EditorTools
+        onCaptureAnother={captureImageToCompress}
+        onSelectAnother={selectImageToCompress}
+      />
+      <ConfirmModal />
     </View>
   );
 };

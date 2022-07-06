@@ -4,24 +4,27 @@ import {StyleSheet, Text, View} from 'react-native';
 import EditorToolButton from './EditorToolButton';
 import Slider from '@react-native-community/slider';
 
-interface Props {}
+interface Props {
+  onSelectAnother?: () => void;
+  onCaptureAnother?: () => void;
+}
 
-const EditorTools: FC<Props> = (): JSX.Element => {
-  const handleCaptureAnother = () => {};
-  const handleSelectAnother = () => {};
-
+const EditorTools: FC<Props> = ({
+  onSelectAnother,
+  onCaptureAnother,
+}): JSX.Element => {
   return (
     <View style={styles.container}>
       <View style={styles.btnContainer}>
         <EditorToolButton
           title="Select Another"
           iconName="folder-open"
-          onPress={handleSelectAnother}
+          onPress={onSelectAnother}
         />
         <EditorToolButton
           title="Capture Another"
           iconName="camera"
-          onPress={handleCaptureAnother}
+          onPress={onCaptureAnother}
         />
       </View>
       <View style={styles.infoContainer}>
