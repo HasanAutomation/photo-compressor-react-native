@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 
-import {StyleSheet, Text, View, NativeModules} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import LargeIconButton from '../components/LargeIconButton';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {
@@ -9,8 +9,7 @@ import {
 } from '../utils/helpers';
 import {NavigationProp} from '@react-navigation/native';
 import {RootStackParamList} from '../navigation/AppNavigator';
-
-const {fsModule} = NativeModules;
+import fsModule from '../modules/fsModule';
 
 interface Props {
   navigation: NavigationProp<RootStackParamList>;
