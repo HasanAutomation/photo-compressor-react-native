@@ -1,21 +1,43 @@
 import React, {FC} from 'react';
 import {Modal, StyleSheet, Text, View} from 'react-native';
+import Button from './Button';
 
-interface Props {}
+interface Props {
+  visible: boolean;
+  title?: string;
+  message?: string;
+  onCancelPress?: () => void;
+  onDiscardPress?: () => void;
+}
 
-const ConfirmModal: FC<Props> = (): JSX.Element => {
+const ConfirmModal: FC<Props> = ({
+  visible = false,
+  title,
+  message,
+  onCancelPress,
+  onDiscardPress,
+}): JSX.Element => {
   return (
-    <Modal transparent>
+    <Modal transparent visible={visible}>
       <View style={styles.container}>
         <View style={styles.modal}>
-          <Text style={styles.title}>Are you sure?</Text>
-          <Text style={styles.subtitle}>
-            This action will discard all your changes
-          </Text>
+          <View>
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.subtitle}>{message}</Text>
+          </View>
+          <View style={styles.btnContainer}>
+            <Button title="Cancel" onPress={onCancelPress} />
+            <Button title="Discard" color="red" onPress={onDiscardPress} />
+          </View>
         </View>
       </View>
     </Modal>
   );
+};
+
+ConfirmModal.defaultProps = {
+  title: 'Are you sure?',
+  message: 'This action will discard all your changes',
 };
 
 const styles = StyleSheet.create({
@@ -40,6 +62,11 @@ const styles = StyleSheet.create({
   subtitle: {
     color: '#272727',
     opacity: 0.8,
+    paddingTop: 10,
+  },
+  btnContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingTop: 10,
   },
 });

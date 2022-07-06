@@ -1,5 +1,6 @@
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import BackgroundImageEditor from '../components/BackgroundImageEditor';
 import ConfirmModal from '../components/ConfirmModal';
@@ -20,7 +21,11 @@ interface Props {
 
 const ImageEditor: FC<Props> = ({route}): JSX.Element => {
   const {imageUri} = route.params;
+
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   const [selectedImage, setSelectedImage] = useState<string>('');
+  const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
 
   const captureImageToCompress = async (): Promise<void> => {
     const {path, error} = await selectAndCaptureImage();
@@ -31,6 +36,27 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
     const {path, error} = await selectAndCropFromGallery();
     if (error) return console.log(error);
     setSelectedImage(path);
+  };
+
+  const displayConfirmModal = (): void => {
+    setShowConfirmModal(true);
+  };
+  const hideConfirmModal = (): void => {
+    setShowConfirmModal(false);
+  };
+
+  // Handling the back press
+  useEffect(() => {
+    navigation.addListener('beforeRemove', e => {
+      e.preventDefault();
+      displayConfirmModal();
+    });
+  }, []);
+
+  const handleToMoveBackScreen = (): void => {
+    navigation.removeListener('beforeRemove', () => {});
+    hideConfirmModal();
+    navigation.goBack();
   };
 
   return (
@@ -44,7 +70,11 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
         onCaptureAnother={captureImageToCompress}
         onSelectAnother={selectImageToCompress}
       />
-      <ConfirmModal />
+      <ConfirmModal
+        visible={showConfirmModal}
+        onCancelPress={hideConfirmModal}
+        onDiscardPress={handleToMoveBackScreen}
+      />
     </View>
   );
 };
