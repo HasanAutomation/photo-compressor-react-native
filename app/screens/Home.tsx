@@ -22,7 +22,7 @@ const Home: FC<Props> = ({navigation}: Props): JSX.Element => {
     });
   };
 
-  fsModule.greetingFromNative('Raina', (val: string) => console.log(val));
+  fsModule.greetingFromNative('Raina').then(val => console.log(val));
 
   const handleImageCapture = async (): Promise<void> => {
     try {
