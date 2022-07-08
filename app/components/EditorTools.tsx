@@ -7,11 +7,13 @@ import Slider from '@react-native-community/slider';
 interface Props {
   onSelectAnother?: () => void;
   onCaptureAnother?: () => void;
+  size: number;
 }
 
 const EditorTools: FC<Props> = ({
   onSelectAnother,
   onCaptureAnother,
+  size,
 }): JSX.Element => {
   return (
     <View style={styles.container}>
@@ -29,7 +31,7 @@ const EditorTools: FC<Props> = ({
       </View>
       <View style={styles.infoContainer}>
         <Text style={styles.info}>Compressed to 50%</Text>
-        <Text style={styles.info}>Image size: 50kb</Text>
+        <Text style={styles.info}>Image size: {size}</Text>
       </View>
       <Slider
         maximumTrackTintColor="rgba(108,154,222,0.8)"

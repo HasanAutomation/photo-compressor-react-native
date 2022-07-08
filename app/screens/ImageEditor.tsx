@@ -1,6 +1,7 @@
+import React, {FC, useEffect, useState} from 'react';
+
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {FC, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import BackgroundImageEditor from '../components/BackgroundImageEditor';
 import ConfirmModal from '../components/ConfirmModal';
@@ -12,6 +13,7 @@ import {
   selectAndCaptureImage,
   selectAndCropFromGallery,
 } from '../utils/helpers';
+import fsModule from '../modules/fsModule';
 
 type RouteProps = NativeStackScreenProps<RootStackParamList, 'ImageEditor'>;
 
@@ -21,6 +23,7 @@ interface Props {
 
 const ImageEditor: FC<Props> = ({route}): JSX.Element => {
   const {imageUri} = route.params;
+  const [imageSize, setImageSize] = useState<number>(0);
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -45,6 +48,15 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
     setShowConfirmModal(false);
   };
 
+  const removePrefix = (uri: string): string => uri.replace('file:///', '');
+
+  const getImageSize = async () => {
+    const size = await fsModule.getImageSize(
+      selectedImage ? removePrefix(selectedImage) : removePrefix(imageUri),
+    );
+    setImageSize(size);
+  };
+
   // Handling the back press
   useEffect(() => {
     navigation.addListener('beforeRemove', e => {
@@ -52,6 +64,10 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
       displayConfirmModal();
     });
   }, []);
+
+  useEffect(() => {
+    getImageSize();
+  }, [selectedImage]);
 
   const handleToMoveBackScreen = (): void => {
     navigation.removeListener('beforeRemove', () => {});
@@ -69,6 +85,7 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
       <EditorTools
         onCaptureAnother={captureImageToCompress}
         onSelectAnother={selectImageToCompress}
+        size={imageSize}
       />
       <ConfirmModal
         visible={showConfirmModal}
