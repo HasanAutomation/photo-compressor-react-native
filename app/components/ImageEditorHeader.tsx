@@ -4,9 +4,11 @@ import {FC} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-interface Props {}
+interface Props {
+  onSavePress: () => void;
+}
 
-const ImageEditorHeader: FC<Props> = (): JSX.Element => {
+const ImageEditorHeader: FC<Props> = ({onSavePress}): JSX.Element => {
   const navigation = useNavigation();
 
   const handleGoBack = (): void => {
@@ -21,7 +23,7 @@ const ImageEditorHeader: FC<Props> = (): JSX.Element => {
       </Pressable>
       {/* Save */}
       <View style={styles.saveContainer}>
-        <Pressable style={styles.buttonContainer}>
+        <Pressable style={styles.buttonContainer} onPress={onSavePress}>
           <Icon name="file-download" color="red" style={styles.icon} />
         </Pressable>
         <Text style={styles.saveText}>Save</Text>

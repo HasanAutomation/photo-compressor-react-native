@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {FC} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import EditorToolButton from './EditorToolButton';
@@ -8,12 +8,20 @@ interface Props {
   onSelectAnother?: () => void;
   onCaptureAnother?: () => void;
   size: number;
+  onSliderChange?: (value: number) => void;
+  sliderValue: number;
+  compressedSize: number;
+  onSlidingComplete?: (value: number) => void;
 }
 
 const EditorTools: FC<Props> = ({
   onSelectAnother,
   onCaptureAnother,
+  onSliderChange,
   size,
+  sliderValue,
+  compressedSize,
+  onSlidingComplete,
 }): JSX.Element => {
   return (
     <View style={styles.container}>
@@ -30,13 +38,18 @@ const EditorTools: FC<Props> = ({
         />
       </View>
       <View style={styles.infoContainer}>
-        <Text style={styles.info}>Compressed to 50%</Text>
-        <Text style={styles.info}>Image size: {size}</Text>
+        <Text style={styles.info}>Compressed to {sliderValue}%</Text>
+        <Text style={styles.info}>Image size: {size} KB</Text>
       </View>
       <Slider
+        maximumValue={100}
+        minimumValue={0}
+        value={sliderValue}
+        onValueChange={onSliderChange}
         maximumTrackTintColor="rgba(108,154,222,0.8)"
         minimumTrackTintColor="rgb(108,154,222)"
         thumbTintColor="rgb(108,154,222)"
+        onSlidingComplete={onSlidingComplete}
       />
     </View>
   );

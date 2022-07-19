@@ -9,7 +9,6 @@ import {
 } from '../utils/helpers';
 import {NavigationProp} from '@react-navigation/native';
 import {RootStackParamList} from '../navigation/AppNavigator';
-import fsModule from '../modules/fsModule';
 
 interface Props {
   navigation: NavigationProp<RootStackParamList>;
@@ -21,8 +20,6 @@ const Home: FC<Props> = ({navigation}: Props): JSX.Element => {
       imageUri: uri,
     });
   };
-
-  fsModule.greetingFromNative('Raina').then(val => console.log(val));
 
   const handleImageCapture = async (): Promise<void> => {
     try {
