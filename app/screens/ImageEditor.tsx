@@ -153,7 +153,6 @@ const ImageEditor: FC<Props> = ({route}): JSX.Element => {
       if (res === 'Done') {
         setDone(true);
       }
-      console.log('res', res);
     } catch (err) {
       console.log(err);
       ToastAndroid.show('something went wring', ToastAndroid.LONG);
